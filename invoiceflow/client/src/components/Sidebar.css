@@ -28,12 +28,12 @@
 /* lgo-out button  */
 .logout-item {
   margin-top: 12px;
-  color: #e5484d;
   cursor: pointer;
 }
 
 .logout-item:hover {
   background-color: rgba(229, 72, 77, 0.1);
+  color: red !important;
 }
 
 /* =========================================
@@ -137,6 +137,7 @@
   font-size: 13px;
   font-weight: 500;
   transition: all 0.2s ease;
+  cursor: pointer;
 }
 
 .nav-icon {

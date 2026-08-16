@@ -222,6 +222,7 @@ const CreateInvoice = () => {
                 <option value="Draft">Draft</option>
                 <option value="Sent">Sent</option>
                 <option value="Paid">Paid</option>
+                <option value="Pending">Pending</option>
                 <option value="Overdue">Overdue</option>
                 <option value="Cancelled">Cancelled</option>
               </select>
@@ -308,7 +309,7 @@ const CreateInvoice = () => {
                   onChange={(e) =>
                     handleItemChange(index, "description", e.target.value)
                   }
-                  placeholder="Website development"
+                  placeholder="Items"
                   required
                 />
               </div>
