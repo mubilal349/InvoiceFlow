@@ -1,9 +1,7 @@
 import React from "react";
-import { useTheme } from "../context/ThemeContext";
 import "./Navbar.css";
 
 const Navbar = ({ onToggleSidebar }) => {
-  const { theme, toggleTheme } = useTheme();
   const user = JSON.parse(localStorage.getItem("user"));
 
   return (
@@ -27,19 +25,6 @@ const Navbar = ({ onToggleSidebar }) => {
       </div>
 
       <div className="navbar-right">
-        {/* Theme Toggle Button */}
-        <button
-          className="theme-toggle"
-          onClick={toggleTheme}
-          title={
-            theme === "light" ? "Switch to dark mode" : "Switch to light mode"
-          }
-        >
-          {theme === "light" ? "🌙" : "☀️"}
-        </button>
-
-        <div className="navbar-divider" />
-
         {/* User Info */}
         <div className="navbar-user">
           <div className="navbar-avatar">

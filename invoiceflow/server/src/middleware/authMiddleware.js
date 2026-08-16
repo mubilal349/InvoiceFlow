@@ -3,7 +3,16 @@ import User from "../models/User.js";
 
 const authMiddleware = async (req, res, next) => {
   try {
-    const token = req.cookies.token;
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({
+        success: false,
+        message: "Authentication required",
+      });
+    }
+
+    const token = authHeader.split(" ")[1];
 
     if (!token) {
       return res.status(401).json({
@@ -14,19 +23,19 @@ const authMiddleware = async (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    const user = await User.findById(decoded.userId);
+    const user = await User.findById(decoded.id).select("-password");
 
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: "User no longer exists",
+        message: "User not found",
       });
     }
 
     if (!user.isActive) {
       return res.status(403).json({
         success: false,
-        message: "Account is disabled",
+        message: "Account is inactive",
       });
     }
 
@@ -34,6 +43,8 @@ const authMiddleware = async (req, res, next) => {
 
     next();
   } catch (error) {
+    console.error("Auth middleware error:", error.message);
+
     return res.status(401).json({
       success: false,
       message: "Invalid or expired authentication",

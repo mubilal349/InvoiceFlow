@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
+import invoiceRoutes from "./routes/invoiceRoutes.js";
 
 dotenv.config();
 
@@ -33,6 +34,7 @@ app.use(express.json());
 // ==========================================
 
 app.use("/api/auth", authRoutes);
+app.use("/api/invoices", invoiceRoutes);
 
 // ==========================================
 // TEST ROUTE

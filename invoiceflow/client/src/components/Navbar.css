@@ -1,80 +1,107 @@
-/* =========================================
-   NAVBAR BASE
-========================================= */
+/* Reuses the same tokens as Dashboard.css. If Navbar.css is loaded on a page
+   without Dashboard.css, keep this :root block; otherwise it's safe to leave
+   here since duplicate custom properties don't conflict. */
+:root {
+  --bg-surface: #ffffff;
+  --border: #e6e8f0;
+  --text-primary: #1a1d29;
+  --text-secondary: #6b7085;
+  --text-muted: #9698a8;
+  --accent: #4f46e5;
+  --accent-soft: #eef0ff;
+}
 
 .navbar {
-  height: 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 28px;
-  background: var(--card-bg, #0b0a12);
-  border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.08));
-  box-sizing: border-box;
+  gap: 16px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px;
   position: sticky;
   top: 0;
-  z-index: 50;
+  z-index: 20;
 }
 
+@media (min-width: 768px) {
+  .navbar {
+    padding: 16px 40px;
+  }
+}
+
+/* ==========================================================================
+   Left side
+   ========================================================================== */
 .navbar-left {
   display: flex;
   align-items: center;
   gap: 14px;
+  min-width: 0;
 }
 
 .navbar-title {
-  margin: 0;
-  color: var(--text-primary, #f4f1fb);
   font-size: 16px;
-  font-weight: 600;
-  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--text-primary);
 }
 
 .navbar-subtitle {
-  margin: 2px 0 0;
-  color: var(--text-secondary, #625d70);
-  font-size: 11px;
+  font-size: 12px;
+  color: var(--text-secondary);
 }
 
-/* =========================================
-   NAVBAR RIGHT & CONTROLS
-========================================= */
+/* Mobile hamburger */
+.mobile-menu-button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 0;
+  align-items: center;
+}
 
+.mobile-menu-button span {
+  display: block;
+  width: 16px;
+  height: 2px;
+  background: var(--text-primary);
+  border-radius: 2px;
+}
+
+.mobile-menu-button:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+@media (min-width: 900px) {
+  .mobile-menu-button {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   Right side
+   ========================================================================== */
 .navbar-right {
   display: flex;
   align-items: center;
-  gap: 12px;
-}
-
-.theme-toggle {
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
-  border-radius: 8px;
-  background: var(--soft-bg, rgba(255, 255, 255, 0.04));
-  color: var(--text-primary, #f4f1fb);
-  cursor: pointer;
-  font-size: 15px;
-  transition: all 0.2s ease;
-  top: 15px;
-  right: 40%;
-}
-
-.theme-toggle:hover {
-  background: var(--soft-bg-hover, rgba(255, 255, 255, 0.08));
-  transform: translateY(-1px);
+  gap: 16px;
 }
 
 .navbar-divider {
   width: 1px;
   height: 24px;
-  background: var(--border, rgba(255, 255, 255, 0.1));
+  background: var(--border);
 }
-
-/* USER INFO */
 
 .navbar-user {
   display: flex;
@@ -83,86 +110,39 @@
 }
 
 .navbar-avatar {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #7655ef, #925ff4);
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: 700;
   flex-shrink: 0;
 }
 
 .navbar-user-info {
-  display: flex;
+  display: none;
   flex-direction: column;
+  line-height: 1.3;
+}
+
+@media (min-width: 640px) {
+  .navbar-user-info {
+    display: flex;
+  }
 }
 
 .navbar-user-name {
-  color: var(--text-primary, #e5e1ef);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
+  color: var(--text-primary);
 }
 
 .navbar-user-role {
-  color: var(--text-secondary, #625d70);
-  font-size: 10px;
+  font-size: 12px;
+  color: var(--text-muted);
   text-transform: capitalize;
-}
-
-/* MOBILE TRIGGER */
-
-.mobile-menu-button {
-  display: none;
-  width: 36px;
-  height: 36px;
-  border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
-  border-radius: 8px;
-  background: var(--soft-bg, rgba(255, 255, 255, 0.04));
-  cursor: pointer;
-  padding: 8px;
-  flex-direction: column;
-  justify-content: center;
-  gap: 4px;
-}
-
-.mobile-menu-button span {
-  display: block;
-  width: 18px;
-  height: 2px;
-  background: var(--text-primary, #b7b1c6);
-  border-radius: 2px;
-}
-
-/* =========================================
-   MEDIA QUERIES
-========================================= */
-
-@media (max-width: 768px) {
-  .navbar {
-    padding: 0 16px;
-    height: 64px;
-  }
-
-  .mobile-menu-button {
-    display: flex;
-  }
-
-  .navbar-subtitle,
-  .navbar-user-role {
-    display: none;
-  }
-}
-
-@media (max-width: 480px) {
-  .navbar-user-info {
-    display: none;
-  }
-
-  .navbar-divider {
-    display: none;
-  }
 }
