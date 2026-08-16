@@ -5,6 +5,8 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import CreateInvoice from "./pages/CreateInvoice";
 import EditInvoice from "./pages/EditInvoice";
+import Home from "./components/Home";
+import Privacy from "./pages/Privacy";
 function App() {
   return (
     <BrowserRouter>
@@ -19,7 +21,9 @@ function App() {
 
         <Route path="/edit-invoice/:id" element={<EditInvoice />} />
 
-        <Route path="*" element={<Login />} />
+        <Route path="/privacy" element={<Privacy />} />
+
+        <Route path="*" element={<Home />} />
       </Routes>
     </BrowserRouter>
   );
