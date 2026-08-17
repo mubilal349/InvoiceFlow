@@ -506,57 +506,408 @@
   background: var(--green);
 }
 
-/* ==========================================================================
-   Business overview / chart
-   ========================================================================== */
-.overview-card .card-header {
-  align-items: center;
+/* =========================================
+   BUSINESS OVERVIEW
+========================================= */
+
+.overview-card {
+  width: 100%;
 }
 
-.period-select {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 8px 12px;
+.overview-card .card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 25px;
+}
+
+.overview-card .card-header h3 {
+  margin: 0;
+
+  font-size: 19px;
+
+  font-weight: 700;
+
+  color: #111827;
+}
+
+.overview-card .card-header p {
+  margin: 5px 0 0;
+
   font-size: 13px;
-  background: var(--bg-surface);
-  color: var(--text-primary);
+
+  color: #6b7280;
+}
+
+/* =========================================
+   PERIOD SELECT
+========================================= */
+
+.period-select {
+  min-width: 130px;
+
+  padding: 9px 12px;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  color: #374151;
+
+  font-size: 13px;
+
+  outline: none;
+
   cursor: pointer;
 }
 
-.chart-placeholder {
+.period-select:focus {
+  border-color: #94a3b8;
+}
+
+/* =========================================
+   CHART
+========================================= */
+
+.business-chart {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 4px;
-  padding: 48px 16px;
-  border: 1px dashed var(--border);
-  border-radius: var(--radius-md);
-  background: var(--bg-app);
-}
 
-.chart-line {
   width: 100%;
-  max-width: 320px;
-  height: 2px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--border) 20%,
-    var(--border) 80%,
-    transparent
-  );
-  margin-bottom: 12px;
+
+  height: 280px;
+
+  margin-top: 10px;
 }
 
-.chart-placeholder span {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-secondary);
+/* =========================================
+   Y AXIS
+========================================= */
+
+.chart-y-axis {
+  width: 80px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: space-between;
+
+  padding: 0 12px 32px 0;
+
+  text-align: right;
+
+  font-size: 11px;
+
+  color: #94a3b8;
 }
 
-.chart-placeholder small {
+/* =========================================
+   CHART AREA
+========================================= */
+
+.chart-area {
+  position: relative;
+
+  flex: 1;
+
+  min-width: 0;
+
+  border-left: 1px solid #e5e7eb;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* =========================================
+   GRID
+========================================= */
+
+.chart-grid {
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: space-between;
+
+  pointer-events: none;
+}
+
+.chart-grid span {
+  width: 100%;
+
+  border-top: 1px dashed #e5e7eb;
+}
+
+/* =========================================
+   BARS
+========================================= */
+
+.chart-bars {
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+
+  display: flex;
+
+  align-items: stretch;
+
+  justify-content: space-around;
+
+  gap: 10px;
+
+  padding: 15px 10px 0;
+}
+
+/* =========================================
+   COLUMN
+========================================= */
+
+.chart-column {
+  flex: 1;
+
+  min-width: 0;
+
+  height: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: flex-end;
+}
+
+/* =========================================
+   BAR WRAPPER
+========================================= */
+
+.chart-bars-wrapper {
+  width: 100%;
+
+  height: calc(100% - 30px);
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: center;
+
+  gap: 5px;
+}
+
+/* =========================================
+   BAR
+========================================= */
+
+.chart-bar {
+  width: 18px;
+
+  min-height: 0;
+
+  border-radius: 5px 5px 0 0;
+
+  transition:
+    height 0.4s ease,
+    opacity 0.2s ease;
+}
+
+.chart-bar:hover {
+  opacity: 0.75;
+}
+
+/* =========================================
+   REVENUE BAR
+========================================= */
+
+.revenue-bar {
+  background: #2563eb;
+}
+
+/* =========================================
+   EXPENSE BAR
+========================================= */
+
+.expense-bar {
+  background: #ef4444;
+}
+
+/* =========================================
+   LABEL
+========================================= */
+
+.chart-label {
+  height: 30px;
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: center;
+
+  font-size: 11px;
+
+  color: #94a3b8;
+
+  white-space: nowrap;
+}
+
+/* =========================================
+   LEGEND
+========================================= */
+
+.chart-legend {
+  display: flex;
+
+  align-items: center;
+
+  gap: 22px;
+
+  margin-top: 20px;
+
+  padding-top: 15px;
+
+  border-top: 1px solid #f1f5f9;
+}
+
+.legend-item {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
   font-size: 12px;
-  color: var(--text-muted);
+
+  color: #64748b;
+}
+
+.legend-dot {
+  width: 9px;
+
+  height: 9px;
+
+  border-radius: 50%;
+}
+
+.revenue-dot {
+  background: #2563eb;
+}
+
+.expense-dot {
+  background: #ef4444;
+}
+
+/* =========================================
+   TOTAL PROFIT
+========================================= */
+
+.chart-total {
+  margin-left: auto;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+.chart-total span {
+  font-size: 12px;
+
+  color: #64748b;
+}
+
+.chart-total strong {
+  font-size: 14px;
+
+  color: #16a34a;
+}
+
+.chart-total .negative-profit {
+  color: #dc2626;
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+  .overview-card .card-header {
+    align-items: flex-start;
+
+    gap: 15px;
+  }
+
+  .period-select {
+    min-width: 115px;
+
+    font-size: 12px;
+  }
+
+  .business-chart {
+    height: 240px;
+  }
+
+  .chart-y-axis {
+    width: 60px;
+
+    font-size: 9px;
+  }
+
+  .chart-bar {
+    width: 11px;
+  }
+
+  .chart-bars {
+    gap: 4px;
+
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .chart-label {
+    font-size: 9px;
+  }
+
+  .chart-legend {
+    gap: 12px;
+
+    flex-wrap: wrap;
+  }
+
+  .chart-total {
+    width: 100%;
+
+    margin-left: 0;
+
+    margin-top: 5px;
+  }
+}
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 450px) {
+  .overview-card .card-header {
+    flex-direction: column;
+  }
+
+  .period-select {
+    width: 100%;
+  }
+
+  .business-chart {
+    height: 210px;
+  }
 }

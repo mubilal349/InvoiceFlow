@@ -6,6 +6,7 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import invoiceRoutes from "./routes/invoiceRoutes.js";
 import customerRoutes from "./routes/customerRoutes.js";
+import ExpenseRoutes from "./routes/expenseRoutes.js";
 
 dotenv.config();
 
@@ -55,6 +56,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/invoices", invoiceRoutes);
 app.use("/api/customers", customerRoutes);
+app.use("/api/expenses", ExpenseRoutes);
 
 // ==========================================
 // TEST ROUTE

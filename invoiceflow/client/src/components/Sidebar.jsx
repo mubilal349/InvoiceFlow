@@ -1,5 +1,6 @@
 import React from "react";
 import "./Sidebar.css";
+import logoIcon from "../assets/invoiceflow.jfif";
 
 const Sidebar = ({ isOpen, onClose, activeTab, setActiveTab, onLogout }) => {
   return (
@@ -7,7 +8,7 @@ const Sidebar = ({ isOpen, onClose, activeTab, setActiveTab, onLogout }) => {
       {/* SIDEBAR HEADER */}
       <div className="sidebar-header">
         <div className="sidebar-brand">
-          <div className="brand-logo">IF</div>
+          <img src={logoIcon} alt="InvoiceFlow Logo" className="brand-logo" />
           <span className="brand-name">InvoiceFlow</span>
         </div>
 
@@ -99,7 +100,10 @@ const Sidebar = ({ isOpen, onClose, activeTab, setActiveTab, onLogout }) => {
           </button>
 
           {/* EXPENSES */}
-          <a href="#expenses" className="nav-item">
+          <button
+            className={`nav-item ${activeTab === "expense" ? "active" : ""}`}
+            onClick={() => setActiveTab("expenses")}
+          >
             <svg
               className="nav-icon"
               viewBox="0 0 24 24"
@@ -112,7 +116,7 @@ const Sidebar = ({ isOpen, onClose, activeTab, setActiveTab, onLogout }) => {
             </svg>
 
             <span>Expenses</span>
-          </a>
+          </button>
         </div>
 
         <div className="nav-section">
