@@ -89,7 +89,11 @@ const Customers = () => {
           <p>View customers and their invoice activity.</p>
         </div>
 
-        <button className="refresh-customers-btn" onClick={loadCustomers}>
+        <button
+          className="refresh-customers-btn"
+          style={{ cursor: "pointer" }}
+          onClick={loadCustomers}
+        >
           ↻ Refresh
         </button>
       </div>
