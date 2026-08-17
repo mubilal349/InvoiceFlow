@@ -7,12 +7,23 @@ import {
   updateInvoice,
   deleteInvoice,
   downloadInvoicePDF,
+  getCustomersFromInvoices,
 } from "../controllers/invoiceController.js";
 
 import authMiddleware from "../middleware/authMiddleware.js";
 import adminMiddleware from "../middleware/adminMiddleware.js";
 
 const router = express.Router();
+
+/*
+=========================================
+USER + ADMIN
+
+VIEW CUSTOMERS FROM INVOICES
+=========================================
+*/
+
+router.get("/customers", authMiddleware, getCustomersFromInvoices);
 
 /*
 =========================================

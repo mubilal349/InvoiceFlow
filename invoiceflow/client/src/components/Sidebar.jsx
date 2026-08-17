@@ -78,7 +78,10 @@ const Sidebar = ({ isOpen, onClose, activeTab, setActiveTab, onLogout }) => {
           </button>
 
           {/* CUSTOMERS */}
-          <a href="#customers" className="nav-item">
+          <button
+            className={`nav-item ${activeTab === "customers" ? "active" : ""}`}
+            onClick={() => setActiveTab("customers")}
+          >
             <svg
               className="nav-icon"
               viewBox="0 0 24 24"
@@ -93,7 +96,7 @@ const Sidebar = ({ isOpen, onClose, activeTab, setActiveTab, onLogout }) => {
             </svg>
 
             <span>Customers</span>
-          </a>
+          </button>
 
           {/* EXPENSES */}
           <a href="#expenses" className="nav-item">

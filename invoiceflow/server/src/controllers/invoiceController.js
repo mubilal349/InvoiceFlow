@@ -73,6 +73,95 @@ ADMIN ONLY
 =========================================
 */
 
+/*
+=========================================
+GET CUSTOMERS FROM INVOICES
+
+ADMIN + USER
+=========================================
+*/
+
+export const getCustomersFromInvoices = async (req, res) => {
+  try {
+    const customers = await Invoice.aggregate([
+      {
+        $match: {
+          createdBy: req.user._id,
+        },
+      },
+
+      {
+        $group: {
+          // Use email as the main customer identifier
+          _id: "$customerEmail",
+
+          customerName: {
+            $first: "$customerName",
+          },
+
+          customerEmail: {
+            $first: "$customerEmail",
+          },
+
+          customerAddress: {
+            $first: "$customerAddress",
+          },
+
+          invoiceCount: {
+            $sum: 1,
+          },
+
+          totalAmount: {
+            $sum: "$total",
+          },
+
+          paidAmount: {
+            $sum: {
+              $cond: [{ $eq: ["$status", "Paid"] }, "$total", 0],
+            },
+          },
+
+          pendingAmount: {
+            $sum: {
+              $cond: [
+                {
+                  $in: ["$status", ["Pending", "Sent", "Overdue"]],
+                },
+                "$total",
+                0,
+              ],
+            },
+          },
+
+          overdueAmount: {
+            $sum: {
+              $cond: [{ $eq: ["$status", "Overdue"] }, "$total", 0],
+            },
+          },
+        },
+      },
+
+      {
+        $sort: {
+          customerName: 1,
+        },
+      },
+    ]);
+
+    return res.status(200).json({
+      success: true,
+      customers,
+    });
+  } catch (error) {
+    console.error("Get customers from invoices error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch customers",
+    });
+  }
+};
+
 export const createInvoice = async (req, res) => {
   try {
     const {

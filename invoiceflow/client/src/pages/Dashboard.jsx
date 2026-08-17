@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import Invoice from "./Invoices";
+import Customers from "./Customers";
 import "./Dashboard.css";
 
 const Dashboard = () => {
@@ -321,7 +322,10 @@ const Dashboard = () => {
                       </div>
                     </button>
 
-                    <button className="quick-action">
+                    <button
+                      className="quick-action"
+                      onClick={() => setActiveTab("customers")}
+                    >
                       <span className="quick-icon blue">♙</span>
 
                       <div>
@@ -379,6 +383,11 @@ const Dashboard = () => {
               INVOICES TAB
           ========================================= */}
           {activeTab === "invoices" && <Invoice />}
+
+          {/* =========================================
+             CUSTOMERS TAB
+          ========================================= */}
+          {activeTab === "customers" && <Customers />}
         </main>
       </div>
     </div>
