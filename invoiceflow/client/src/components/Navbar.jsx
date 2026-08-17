@@ -1,5 +1,6 @@
 import React from "react";
 import "./Navbar.css";
+import Notifications from "../components/Notifications";
 
 const Navbar = ({ onToggleSidebar }) => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -25,6 +26,9 @@ const Navbar = ({ onToggleSidebar }) => {
       </div>
 
       <div className="navbar-right">
+        <div className="topbar-actions">
+          <Notifications />
+        </div>
         {/* User Info */}
         <div className="navbar-user">
           <div className="navbar-avatar">

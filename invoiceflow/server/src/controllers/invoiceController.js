@@ -1,6 +1,6 @@
 import Invoice from "../models/Invoice.js";
 import PDFDocument from "pdfkit";
-
+import createNotification from "../utils/createNotification.js";
 /*
 =========================================
 GET ALL INVOICES
@@ -313,9 +313,33 @@ export const createInvoice = async (req, res) => {
       createdBy: req.user._id,
     });
 
+    // ==============================
+    // CREATE NOTIFICATION
+    // ==============================
+
+    await createNotification({
+      user: req.user._id,
+
+      type: "INVOICE_CREATED",
+
+      title: "Invoice Created",
+
+      message: `Invoice ${invoice.invoiceNumber} for ${
+        invoice.customerName
+      } was created successfully.`,
+
+      invoice: invoice._id,
+    });
+
+    // ==============================
+    // RESPONSE
+    // ==============================
+
     return res.status(201).json({
       success: true,
+
       message: "Invoice created successfully",
+
       invoice,
     });
   } catch (error) {
@@ -323,6 +347,7 @@ export const createInvoice = async (req, res) => {
 
     return res.status(500).json({
       success: false,
+
       message: error.message || "Failed to create invoice",
     });
   }
