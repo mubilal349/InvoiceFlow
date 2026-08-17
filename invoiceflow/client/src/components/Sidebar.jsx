@@ -123,7 +123,10 @@ const Sidebar = ({ isOpen, onClose, activeTab, setActiveTab, onLogout }) => {
           <span className="nav-section-title">PREFERENCES</span>
 
           {/* ANALYTICS */}
-          <a href="#analytics" className="nav-item">
+          <button
+            className="nav-item"
+            onClick={() => setActiveTab("analytics")}
+          >
             <svg
               className="nav-icon"
               viewBox="0 0 24 24"
@@ -137,7 +140,7 @@ const Sidebar = ({ isOpen, onClose, activeTab, setActiveTab, onLogout }) => {
             </svg>
 
             <span>Analytics</span>
-          </a>
+          </button>
 
           {/* SETTINGS */}
           <a href="#settings" className="nav-item">

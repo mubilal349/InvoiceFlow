@@ -7,6 +7,7 @@ import authRoutes from "./routes/authRoutes.js";
 import invoiceRoutes from "./routes/invoiceRoutes.js";
 import customerRoutes from "./routes/customerRoutes.js";
 import ExpenseRoutes from "./routes/expenseRoutes.js";
+import analyticsRoutes from "./routes/analyticsRoutes.js";
 
 dotenv.config();
 
@@ -57,6 +58,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/invoices", invoiceRoutes);
 app.use("/api/customers", customerRoutes);
 app.use("/api/expenses", ExpenseRoutes);
+app.use("/api/analytics", analyticsRoutes);
 
 // ==========================================
 // TEST ROUTE

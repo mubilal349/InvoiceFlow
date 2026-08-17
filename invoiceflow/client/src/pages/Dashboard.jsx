@@ -5,6 +5,7 @@ import Invoice from "./Invoices";
 import Customers from "./Customers";
 import "./Dashboard.css";
 import Expenses from "./Expenses";
+import Analytics from "./Analytics";
 
 import { getInvoices } from "../services/invoiceService";
 
@@ -815,6 +816,12 @@ const Dashboard = () => {
           ========================================= */}
 
           {activeTab === "expenses" && <Expenses />}
+
+          {/* =========================================
+             Analytics TAB
+          ========================================= */}
+
+          {activeTab === "analytics" && <Analytics />}
         </main>
       </div>
     </div>
