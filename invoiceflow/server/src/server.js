@@ -32,20 +32,13 @@ const allowedOrigins = [
 ];
 
 const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow requests without an Origin
-    // e.g. Postman or server-to-server requests
-    if (!origin) {
-      return callback(null, true);
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.log("❌ CORS blocked:", origin);
+      callback(new Error("Not allowed by CORS"));
     }
-
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-
-    console.log("Blocked CORS origin:", origin);
-
-    return callback(new Error("Not allowed by CORS"));
   },
 
   credentials: true,
@@ -57,14 +50,12 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// Handle preflight requests
-app.options("*", cors(corsOptions));
-
 // ==========================================
 // BODY PARSER
 // ==========================================
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // ==========================================
 // ROUTES
