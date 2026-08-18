@@ -1,10 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import "./Register.css";
 
 const API_URL = "http://localhost:8000/api";
 
+const MoonIcon = () => (
+  <svg
+    className="icon-svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+  >
+    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+  </svg>
+);
+
+const SunIcon = () => (
+  <svg
+    className="icon-svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+  >
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+  </svg>
+);
+
 const Register = () => {
   const navigate = useNavigate();
+
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -16,6 +44,15 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((current) => (current === "light" ? "dark" : "light"));
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -83,12 +120,23 @@ const Register = () => {
         <div className="glow glow-two"></div>
       </div>
 
+      {/* Theme Toggle */}
+      <button
+        type="button"
+        className="theme-toggle"
+        onClick={toggleTheme}
+        aria-label="Toggle theme"
+        title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+      >
+        {theme === "light" ? <MoonIcon /> : <SunIcon />}
+      </button>
+
       <div className="auth-container">
         {/* Brand */}
 
         <div className="auth-brand">
-          <div className="brand-logo">N</div>
-          <span>NextFlow</span>
+          <div className="brand-logo">IF</div>
+          <span>InvoiceFlow</span>
         </div>
 
         <div className="auth-card register-card">
