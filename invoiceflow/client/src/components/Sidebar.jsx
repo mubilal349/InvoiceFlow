@@ -1,8 +1,11 @@
 import React from "react";
 import "./Sidebar.css";
 import logoIcon from "../assets/invoiceflow.jfif";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Sidebar = ({ isOpen, onClose, activeTab, setActiveTab, onLogout }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
   return (
     <aside className={`sidebar ${isOpen ? "sidebar-mobile-open" : ""}`}>
       {/* SIDEBAR HEADER */}
@@ -143,21 +146,13 @@ const Sidebar = ({ isOpen, onClose, activeTab, setActiveTab, onLogout }) => {
           </button>
 
           {/* SETTINGS */}
-          <a href="#settings" className="nav-item">
-            <svg
-              className="nav-icon"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <circle cx="12" cy="12" r="3" />
-
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a1.65 1.65 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-            </svg>
-
+          <button
+            onClick={() => navigate("/settings")}
+            className={location.pathname === "/settings" ? "active" : ""}
+          >
+            <span>⚙️</span>
             <span>Settings</span>
-          </a>
+          </button>
         </div>
       </nav>
 
