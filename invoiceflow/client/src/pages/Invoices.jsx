@@ -16,13 +16,7 @@ const Invoice = () => {
       setLoading(true);
       setError("");
 
-      const response = await fetch("http://localhost:8000/api/invoices", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await api.get("/invoices");
 
       const data = await response.json();
 
@@ -46,7 +40,7 @@ const Invoice = () => {
   const handleDownloadPDF = async (invoiceId, invoiceNumber) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/invoices/${invoiceId}/pdf`,
+        `https://invoiceflow-backend-production-46c8.up.railway.app/api/invoices${invoiceId}/pdf`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -91,7 +85,7 @@ const Invoice = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:8000/api/invoices/${invoiceId}`,
+        `https://invoiceflow-backend-production-46c8.up.railway.app/api/invoices/${invoiceId}`,
         {
           method: "DELETE",
           headers: {

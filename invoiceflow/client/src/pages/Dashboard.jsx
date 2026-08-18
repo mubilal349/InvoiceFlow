@@ -360,11 +360,14 @@ const Dashboard = () => {
       try {
         const token = localStorage.getItem("token");
 
-        const response = await fetch("http://localhost:8000/api/invoices", {
-          headers: {
-            Authorization: `Bearer ${token}`,
+        const response = await fetch(
+          "https://invoiceflow-backend-production-46c8.up.railway.app/api/invoices",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
-        });
+        );
 
         const data = await response.json();
 

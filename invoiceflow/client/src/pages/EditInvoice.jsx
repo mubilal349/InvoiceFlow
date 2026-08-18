@@ -45,12 +45,15 @@ const EditInvoice = () => {
         return;
       }
 
-      const response = await fetch(`http://localhost:8000/api/invoices/${id}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await fetch(
+        `https://invoiceflow-backend-production-46c8.up.railway.app/api/invoices/${id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
 
       const data = await response.json();
 
@@ -179,43 +182,46 @@ const EditInvoice = () => {
         return;
       }
 
-      const response = await fetch(`http://localhost:8000/api/invoices/${id}`, {
-        method: "PUT",
+      const response = await fetch(
+        `https://invoiceflow-backend-production-46c8.up.railway.app/api/invoices/${id}`,
+        {
+          method: "PUT",
 
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+
+          body: JSON.stringify({
+            invoiceNumber: form.invoiceNumber,
+            customerName: form.customerName,
+            customerEmail: form.customerEmail,
+            customerAddress: form.customerAddress,
+
+            issueDate: form.issueDate,
+            dueDate: form.dueDate,
+
+            items: items.map((item) => ({
+              description: item.description,
+              quantity: Number(item.quantity),
+              price: Number(item.price),
+              total: Number(item.quantity) * Number(item.price),
+            })),
+
+            subtotal,
+
+            tax,
+
+            discount,
+
+            total,
+
+            status: form.status,
+
+            notes: form.notes,
+          }),
         },
-
-        body: JSON.stringify({
-          invoiceNumber: form.invoiceNumber,
-          customerName: form.customerName,
-          customerEmail: form.customerEmail,
-          customerAddress: form.customerAddress,
-
-          issueDate: form.issueDate,
-          dueDate: form.dueDate,
-
-          items: items.map((item) => ({
-            description: item.description,
-            quantity: Number(item.quantity),
-            price: Number(item.price),
-            total: Number(item.quantity) * Number(item.price),
-          })),
-
-          subtotal,
-
-          tax,
-
-          discount,
-
-          total,
-
-          status: form.status,
-
-          notes: form.notes,
-        }),
-      });
+      );
 
       const data = await response.json();
 

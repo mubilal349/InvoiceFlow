@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./createInvoice.css";
+import api from "../services/api";
 
 const CreateInvoice = () => {
   const navigate = useNavigate();
@@ -118,32 +119,23 @@ const CreateInvoice = () => {
         return;
       }
 
-      const response = await fetch("http://localhost:8000/api/invoices", {
-        method: "POST",
+      const response = await api.post("/invoices", {
+        invoiceNumber: form.invoiceNumber,
+        customerName: form.customerName,
+        customerEmail: form.customerEmail,
 
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
+        issueDate: form.issueDate,
+        dueDate: form.dueDate,
 
-        body: JSON.stringify({
-          invoiceNumber: form.invoiceNumber,
-          customerName: form.customerName,
-          customerEmail: form.customerEmail,
+        items: items.map((item) => ({
+          description: item.description,
+          quantity: Number(item.quantity),
+          price: Number(item.price),
+        })),
 
-          issueDate: form.issueDate,
-          dueDate: form.dueDate,
-
-          items: items.map((item) => ({
-            description: item.description,
-            quantity: Number(item.quantity),
-            price: Number(item.price),
-          })),
-
-          tax,
-          status: form.status,
-          notes: form.notes,
-        }),
+        tax,
+        status: form.status,
+        notes: form.notes,
       });
 
       const data = await response.json();
