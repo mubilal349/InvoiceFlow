@@ -1,4 +1,5 @@
-const API_URL = "http://localhost:8000/api/invoices";
+const API_URL =
+  "https://invoiceflow-backend-production-46c8.up.railway.app/api";
 
 // ============================================
 // GET ALL INVOICES

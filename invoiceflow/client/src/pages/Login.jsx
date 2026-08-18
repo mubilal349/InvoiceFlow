@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 
 import "./Login.css";
 
-const API_URL = "http://localhost:8000/api";
+const API_URL =
+  "https://invoiceflow-backend-production-46c8.up.railway.app/api";
 
 // Inline SVG components for a clean, dependency-free icon set
 const MailIcon = () => (

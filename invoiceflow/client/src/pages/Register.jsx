@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Register.css";
 
-const API_URL = "http://localhost:8000/api";
+const API_URL =
+  "https://invoiceflow-backend-production-46c8.up.railway.app/api";
 
 const MoonIcon = () => (
   <svg
