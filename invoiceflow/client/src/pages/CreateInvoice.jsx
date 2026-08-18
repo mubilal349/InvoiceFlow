@@ -133,16 +133,17 @@ const CreateInvoice = () => {
           price: Number(item.price),
         })),
 
-        tax,
+        tax: Number(form.tax || 0),
         status: form.status,
         notes: form.notes,
       });
 
-      const data = await response.json();
+      // Axios response
+      const data = response.data;
 
       console.log("CREATE INVOICE RESPONSE:", data);
 
-      if (!response.ok) {
+      if (!data.success) {
         throw new Error(data.message || "Failed to create invoice");
       }
 
@@ -150,9 +151,13 @@ const CreateInvoice = () => {
 
       navigate("/invoices");
     } catch (error) {
-      console.error("CREATE INVOICE ERROR:", error);
+      console.error("CREATE INVOICE ERROR:", error.response?.data || error);
 
-      setError(error.message);
+      setError(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to create invoice",
+      );
     } finally {
       setLoading(false);
     }

@@ -1,12 +1,11 @@
 const API_URL =
-  "https://invoiceflow-backend-production-46c8.up.railway.app/api";
+  "https://invoiceflow-backend-production-46c8.up.railway.app/api/analytics";
 
 const getHeaders = () => {
   const token = localStorage.getItem("token");
 
   return {
     "Content-Type": "application/json",
-
     Authorization: `Bearer ${token}`,
   };
 };

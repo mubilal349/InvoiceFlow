@@ -1,5 +1,5 @@
 const API_URL =
-  "https://invoiceflow-backend-production-46c8.up.railway.app/api";
+  "https://invoiceflow-backend-production-46c8.up.railway.app/api/notifications";
 
 const getHeaders = () => {
   const token = localStorage.getItem("token");
@@ -11,11 +11,12 @@ const getHeaders = () => {
 };
 
 // =========================================
-// GET
+// GET ALL NOTIFICATIONS
 // =========================================
 
 export const getNotifications = async () => {
   const response = await fetch(API_URL, {
+    method: "GET",
     headers: getHeaders(),
   });
 

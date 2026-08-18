@@ -1,5 +1,5 @@
 const API_URL =
-  "https://invoiceflow-backend-production-46c8.up.railway.app/api";
+  "https://invoiceflow-backend-production-46c8.up.railway.app/api/invoices";
 
 // ============================================
 // GET ALL INVOICES

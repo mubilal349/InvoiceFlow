@@ -1,5 +1,5 @@
 const API_URL =
-  "https://invoiceflow-backend-production-46c8.up.railway.app/api";
+  "https://invoiceflow-backend-production-46c8.up.railway.app/api/settings";
 
 const getHeaders = () => {
   const token = localStorage.getItem("token");
@@ -57,7 +57,6 @@ export const changePassword = async (currentPassword, newPassword) => {
   const response = await fetch(`${API_URL}/password`, {
     method: "PUT",
     headers: getHeaders(),
-
     body: JSON.stringify({
       currentPassword,
       newPassword,

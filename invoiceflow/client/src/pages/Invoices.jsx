@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Invoice.css";
+import api from "../services/api";
 
 const Invoice = () => {
   const [invoices, setInvoices] = useState([]);
@@ -18,16 +19,17 @@ const Invoice = () => {
 
       const response = await api.get("/invoices");
 
-      const data = await response.json();
+      console.log("Invoices response:", response.data);
 
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to fetch invoices");
-      }
-
-      setInvoices(data.invoices || []);
+      setInvoices(response.data.invoices || response.data.data || []);
     } catch (error) {
       console.error("Invoice fetch error:", error);
-      setError(error.message);
+
+      setError(
+        error.response?.data?.message ||
+          error.message ||
+          "Unable to load invoices",
+      );
     } finally {
       setLoading(false);
     }
