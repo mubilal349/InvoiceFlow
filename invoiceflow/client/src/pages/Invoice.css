@@ -57,6 +57,116 @@
 }
 
 /* =========================================
+   INVOICE HEADER ACTIONS
+========================================= */
+
+.invoice-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* =========================================
+   BACK TO DASHBOARD BUTTON
+========================================= */
+
+.back-dashboard-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  height: 44px;
+  padding: 0 18px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+
+  background: #ffffff;
+  color: #374151;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.back-dashboard-btn svg {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+}
+
+.back-dashboard-btn:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+  color: #111827;
+
+  transform: translateX(-2px);
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.back-dashboard-btn:active {
+  transform: translateX(0);
+}
+
+/* =========================================
+   CREATE INVOICE BUTTON
+========================================= */
+
+.create-invoice-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  height: 44px;
+  padding: 0 18px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #111827;
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.create-invoice-btn:hover {
+  background: #1f2937;
+
+  transform: translateY(-1px);
+
+  box-shadow: 0 6px 16px rgba(17, 24, 39, 0.18);
+}
+
+.create-invoice-btn:active {
+  transform: translateY(0);
+}
+
+.plus-icon {
+  font-size: 20px;
+  line-height: 1;
+  font-weight: 400;
+}
+
+/* =========================================
    CREATE BUTTON
 ========================================= */
 

@@ -7,6 +7,7 @@ import {
   updateCustomer,
   deleteCustomer,
   getCustomerInvoices,
+  downloadCustomersPDF,
 } from "../controllers/customerController.js";
 
 import authMiddleware from "../middleware/authMiddleware.js";
@@ -19,6 +20,17 @@ const router = express.Router();
 // =========================================
 
 router.get("/", authMiddleware, getCustomers);
+
+// =========================================
+// DOWNLOAD CUSTOMERS PDF
+// IMPORTANT: MUST BE BEFORE /:id
+// =========================================
+
+router.get("/pdf", authMiddleware, downloadCustomersPDF);
+
+// =========================================
+// SINGLE CUSTOMER
+// =========================================
 
 router.get("/:id", authMiddleware, getCustomer);
 

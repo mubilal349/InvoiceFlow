@@ -93,7 +93,9 @@ const CreateInvoice = () => {
 
   const tax = Number(form.tax || 0);
 
-  const total = subtotal + tax;
+  const discount = Number(form.discount || 0);
+
+  const total = Math.max(0, subtotal + tax - discount);
 
   // ==============================
   // CREATE INVOICE
@@ -121,10 +123,15 @@ const CreateInvoice = () => {
 
       const response = await api.post("/invoices", {
         invoiceNumber: form.invoiceNumber,
+
         customerName: form.customerName,
+
         customerEmail: form.customerEmail,
 
+        customerAddress: form.customerAddress,
+
         issueDate: form.issueDate,
+
         dueDate: form.dueDate,
 
         items: items.map((item) => ({
@@ -134,7 +141,10 @@ const CreateInvoice = () => {
         })),
 
         tax: Number(form.tax || 0),
+        discount: Number(form.discount || 0),
+
         status: form.status,
+
         notes: form.notes,
       });
 
@@ -281,6 +291,17 @@ const CreateInvoice = () => {
                 placeholder="customer@example.com"
               />
             </div>
+            <div className="form-group">
+              <label>Customer Address</label>
+
+              <input
+                type="text"
+                name="customerAddress"
+                value={form.customerAddress}
+                onChange={handleChange}
+                placeholder="Customer Address"
+              />
+            </div>
           </div>
         </div>
 
@@ -383,6 +404,18 @@ const CreateInvoice = () => {
                 min="0"
                 name="tax"
                 value={form.tax}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="tax-row">
+              <label>Discount</label>
+
+              <input
+                type="number"
+                min="0"
+                name="discount"
+                value={form.discount}
                 onChange={handleChange}
               />
             </div>

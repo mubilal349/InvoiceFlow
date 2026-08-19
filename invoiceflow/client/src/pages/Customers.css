@@ -50,6 +50,483 @@
 }
 
 /* =========================================
+   CUSTOMER MODAL OVERLAY
+========================================= */
+
+.customer-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+/* =========================================
+   CUSTOMER MODAL
+========================================= */
+
+.customer-modal {
+  width: 100%;
+  max-width: 680px;
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  background: #ffffff;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.15),
+    0 10px 20px rgba(0, 0, 0, 0.08);
+
+  animation: customerModalIn 0.2s ease-out;
+}
+
+/* =========================================
+   MODAL ANIMATION
+========================================= */
+
+@keyframes customerModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =========================================
+   MODAL HEADER
+========================================= */
+
+.customer-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  padding: 24px 26px;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.customer-modal-header h2 {
+  margin: 0;
+
+  color: #111827;
+
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.customer-modal-header p {
+  margin: 6px 0 0;
+
+  color: #6b7280;
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* =========================================
+   CLOSE BUTTON
+========================================= */
+
+.customer-modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 34px;
+  height: 34px;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #f3f4f6;
+  color: #4b5563;
+
+  font-size: 23px;
+  font-weight: 400;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.customer-modal-close:hover {
+  background: #e5e7eb;
+  color: #111827;
+
+  transform: rotate(90deg);
+}
+
+/* =========================================
+   FORM
+========================================= */
+
+.customer-modal form {
+  padding: 26px;
+}
+
+/* =========================================
+   FORM GRID
+========================================= */
+
+.customer-form-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 19px;
+}
+
+/* =========================================
+   FORM GROUP
+========================================= */
+
+.customer-form-group {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+
+  gap: 7px;
+}
+
+.customer-form-full {
+  grid-column: 1 / -1;
+}
+
+/* =========================================
+   LABEL
+========================================= */
+
+.customer-form-group label {
+  color: #374151;
+
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* =========================================
+   INPUT + TEXTAREA
+========================================= */
+
+.customer-form-group input,
+.customer-form-group textarea {
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 11px 13px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 9px;
+
+  background: #ffffff;
+  color: #111827;
+
+  font-family: inherit;
+  font-size: 14px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.customer-form-group input {
+  height: 44px;
+}
+
+.customer-form-group textarea {
+  min-height: 100px;
+
+  resize: vertical;
+}
+
+/* =========================================
+   PLACEHOLDER
+========================================= */
+
+.customer-form-group input::placeholder,
+.customer-form-group textarea::placeholder {
+  color: #9ca3af;
+}
+
+/* =========================================
+   FOCUS
+========================================= */
+
+.customer-form-group input:focus,
+.customer-form-group textarea:focus {
+  border-color: #111827;
+
+  background: #ffffff;
+
+  box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
+}
+
+/* =========================================
+   REQUIRED / INVALID
+========================================= */
+
+.customer-form-group input:invalid:not(:placeholder-shown) {
+  border-color: #ef4444;
+}
+
+/* =========================================
+   MODAL ACTIONS
+========================================= */
+
+.customer-modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  margin-top: 26px;
+  padding-top: 20px;
+
+  border-top: 1px solid #e5e7eb;
+}
+
+/* =========================================
+   CANCEL BUTTON
+========================================= */
+
+.customer-cancel-btn {
+  height: 42px;
+
+  padding: 0 18px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 9px;
+
+  background: #ffffff;
+  color: #374151;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.customer-cancel-btn:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+  color: #111827;
+}
+
+/* =========================================
+   SAVE BUTTON
+========================================= */
+
+.customer-save-btn {
+  height: 42px;
+
+  padding: 0 20px;
+
+  border: none;
+  border-radius: 9px;
+
+  background: #111827;
+  color: #ffffff;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.customer-save-btn:hover:not(:disabled) {
+  background: #1f2937;
+
+  transform: translateY(-1px);
+
+  box-shadow: 0 5px 12px rgba(17, 24, 39, 0.18);
+}
+
+.customer-save-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.customer-save-btn:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+}
+
+/* =========================================
+   MODAL SCROLLBAR
+========================================= */
+
+.customer-modal::-webkit-scrollbar {
+  width: 7px;
+}
+
+.customer-modal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.customer-modal::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 10px;
+}
+
+.customer-modal::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 650px) {
+  .customer-modal-overlay {
+    align-items: flex-start;
+
+    padding: 15px;
+  }
+
+  .customer-modal {
+    max-height: calc(100vh - 30px);
+
+    border-radius: 14px;
+  }
+
+  .customer-modal-header {
+    padding: 20px;
+  }
+
+  .customer-modal form {
+    padding: 20px;
+  }
+
+  .customer-form-grid {
+    grid-template-columns: 1fr;
+
+    gap: 16px;
+  }
+
+  .customer-form-full {
+    grid-column: auto;
+  }
+
+  .customer-modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .customer-cancel-btn,
+  .customer-save-btn {
+    width: 100%;
+  }
+}
+
+/* =========================================
+   VERY SMALL SCREENS
+========================================= */
+
+@media (max-width: 400px) {
+  .customer-modal-overlay {
+    padding: 10px;
+  }
+
+  .customer-modal {
+    max-height: calc(100vh - 20px);
+  }
+
+  .customer-modal-header {
+    padding: 18px;
+  }
+
+  .customer-modal-header h2 {
+    font-size: 19px;
+  }
+
+  .customer-modal form {
+    padding: 18px;
+  }
+}
+
+/* downlaod custom customer styling */
+.download-customers-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  height: 42px;
+  padding: 0 16px;
+
+  border: 1px solid #dcdce5;
+  border-radius: 9px;
+
+  background: #ffffff;
+  color: #4f46e5;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.download-customers-btn svg {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+}
+
+.download-customers-btn:hover {
+  background: #f5f3ff;
+  border-color: #c7c2ff;
+  color: #4338ca;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.12);
+  transform: translateY(-1px);
+}
+
+.download-customers-btn:active {
+  transform: translateY(0);
+}
+
+/* =========================================
    ADD CUSTOMER BUTTON
 ========================================= */
 

@@ -31,11 +31,30 @@ const invoiceItemSchema = new mongoose.Schema(
 
 const invoiceSchema = new mongoose.Schema(
   {
+    // =========================================
+    // INVOICE
+    // =========================================
+
     invoiceNumber: {
       type: String,
       required: true,
       unique: true,
+      trim: true,
     },
+
+    // =========================================
+    // CUSTOMER REFERENCE
+    // =========================================
+
+    customer: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Customer",
+      default: null,
+    },
+
+    // =========================================
+    // CUSTOMER SNAPSHOT
+    // =========================================
 
     customerName: {
       type: String,
@@ -46,17 +65,28 @@ const invoiceSchema = new mongoose.Schema(
     customerEmail: {
       type: String,
       trim: true,
+      lowercase: true,
+      default: "",
     },
 
     customerAddress: {
       type: String,
       trim: true,
+      default: "",
     },
+
+    // =========================================
+    // ITEMS
+    // =========================================
 
     items: {
       type: [invoiceItemSchema],
       required: true,
     },
+
+    // =========================================
+    // AMOUNTS
+    // =========================================
 
     subtotal: {
       type: Number,
@@ -82,6 +112,10 @@ const invoiceSchema = new mongoose.Schema(
       min: 0,
     },
 
+    // =========================================
+    // DATES
+    // =========================================
+
     issueDate: {
       type: Date,
       default: Date.now,
@@ -92,16 +126,28 @@ const invoiceSchema = new mongoose.Schema(
       required: true,
     },
 
+    // =========================================
+    // STATUS
+    // =========================================
+
     status: {
       type: String,
       enum: ["Draft", "Sent", "Paid", "Overdue", "Pending", "Cancelled"],
       default: "Draft",
     },
 
+    // =========================================
+    // NOTES
+    // =========================================
+
     notes: {
       type: String,
       default: "",
     },
+
+    // =========================================
+    // CREATED BY
+    // =========================================
 
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,

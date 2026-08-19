@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Invoice.css";
 import api from "../services/api";
 
 const Invoice = () => {
+  const navigate = useNavigate();
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -42,8 +44,9 @@ const Invoice = () => {
   const handleDownloadPDF = async (invoiceId, invoiceNumber) => {
     try {
       const response = await fetch(
-        `https://invoiceflow-backend-production-46c8.up.railway.app/api/invoices${invoiceId}/pdf`,
+        `https://invoiceflow-backend-production-46c8.up.railway.app/api/invoices/${invoiceId}/pdf`,
         {
+          method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -51,10 +54,18 @@ const Invoice = () => {
       );
 
       if (!response.ok) {
+        const errorText = await response.text();
+
+        console.error("PDF API ERROR:", errorText);
+
         throw new Error("Failed to generate PDF");
       }
 
       const blob = await response.blob();
+
+      if (blob.size === 0) {
+        throw new Error("Generated PDF is empty");
+      }
 
       const url = window.URL.createObjectURL(blob);
 
@@ -65,16 +76,16 @@ const Invoice = () => {
 
       document.body.appendChild(link);
       link.click();
-      link.remove();
+
+      document.body.removeChild(link);
 
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("PDF download error:", error);
 
-      alert("Unable to download invoice PDF");
+      alert(error.message || "Unable to download invoice PDF");
     }
   };
-
   //   Delete function
   const handleDeleteInvoice = async (invoiceId) => {
     const confirmed = window.confirm(
@@ -182,17 +193,37 @@ const Invoice = () => {
 
           <div>
             <h1>Invoices</h1>
-
             <p>Manage your invoices and payments.</p>
           </div>
         </div>
 
-        {user?.role === "admin" && (
-          <button className="create-invoice-btn" onClick={handleCreateInvoice}>
-            <span className="plus-icon">+</span>
-            Create Invoice
+        <div className="invoice-header-actions">
+          <button
+            className="back-dashboard-btn"
+            onClick={() => navigate("/dashboard")}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M19 12H5" />
+              <polyline points="12 19 5 12 12 5" />
+            </svg>
+            Back to Dashboard
           </button>
-        )}
+
+          {user?.role === "admin" && (
+            <button
+              className="create-invoice-btn"
+              onClick={handleCreateInvoice}
+            >
+              <span className="plus-icon">+</span>
+              Create Invoice
+            </button>
+          )}
+        </div>
       </div>
 
       {/* =========================================

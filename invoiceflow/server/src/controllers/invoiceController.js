@@ -1,4 +1,6 @@
+import mongoose from "mongoose";
 import Invoice from "../models/Invoice.js";
+import Customer from "../models/Customer.js";
 import PDFDocument from "pdfkit";
 import createNotification from "../utils/createNotification.js";
 /*
@@ -12,6 +14,7 @@ ADMIN + USER
 export const getInvoices = async (req, res) => {
   try {
     const invoices = await Invoice.find()
+      .populate("customer", "name email phone company address city country")
       .populate("createdBy", "name email")
       .sort({ createdAt: -1 });
 
@@ -39,10 +42,9 @@ ADMIN + USER
 
 export const getInvoiceById = async (req, res) => {
   try {
-    const invoice = await Invoice.findById(req.params.id).populate(
-      "createdBy",
-      "name email",
-    );
+    const invoice = await Invoice.findById(req.params.id)
+      .populate("customer", "name email phone company address city country")
+      .populate("createdBy", "name email");
 
     if (!invoice) {
       return res.status(404).json({
@@ -83,81 +85,226 @@ ADMIN + USER
 
 export const getCustomersFromInvoices = async (req, res) => {
   try {
-    const customers = await Invoice.aggregate([
-      {
-        $match: {
-          createdBy: req.user._id,
-        },
-      },
+    const userId = new mongoose.Types.ObjectId(req.user._id);
 
-      {
-        $group: {
-          // Use email as the main customer identifier
-          _id: "$customerEmail",
+    // =========================================
+    // GET MANUALLY CREATED CUSTOMERS
+    // =========================================
 
-          customerName: {
-            $first: "$customerName",
-          },
+    const manualCustomers = await Customer.find({
+      createdBy: userId,
+    }).lean();
 
-          customerEmail: {
-            $first: "$customerEmail",
-          },
+    // =========================================
+    // GET CUSTOMERS FROM INVOICES
+    // =========================================
 
-          customerAddress: {
-            $first: "$customerAddress",
-          },
+    const invoices = await Invoice.find({
+      createdBy: userId,
+    })
+      .select(
+        "customer customerName customerEmail customerAddress total status",
+      )
+      .lean();
 
-          invoiceCount: {
-            $sum: 1,
-          },
+    // =========================================
+    // CUSTOMER MAP
+    // =========================================
 
-          totalAmount: {
-            $sum: "$total",
-          },
+    const customerMap = new Map();
 
-          paidAmount: {
-            $sum: {
-              $cond: [{ $eq: ["$status", "Paid"] }, "$total", 0],
-            },
-          },
+    // =========================================
+    // ADD MANUAL CUSTOMERS FIRST
+    // =========================================
 
-          pendingAmount: {
-            $sum: {
-              $cond: [
-                {
-                  $in: ["$status", ["Pending", "Sent", "Overdue"]],
-                },
-                "$total",
-                0,
-              ],
-            },
-          },
+    manualCustomers.forEach((customer) => {
+      const email = customer.email?.trim().toLowerCase() || "";
 
-          overdueAmount: {
-            $sum: {
-              $cond: [{ $eq: ["$status", "Overdue"] }, "$total", 0],
-            },
-          },
-        },
-      },
+      const name = customer.name?.trim() || "Unknown Customer";
 
-      {
-        $sort: {
-          customerName: 1,
-        },
-      },
-    ]);
+      // Email is the best unique identifier
+      const key = email || name.toLowerCase();
+
+      customerMap.set(key, {
+        _id: customer._id,
+
+        customerName: name,
+
+        customerEmail: email,
+
+        customerPhone: customer.phone || "",
+
+        customerCompany: customer.company || "",
+
+        customerAddress: customer.address || "",
+
+        customerCity: customer.city || "",
+
+        customerCountry: customer.country || "",
+
+        customerNotes: customer.notes || "",
+
+        invoiceCount: 0,
+
+        totalAmount: 0,
+
+        paidAmount: 0,
+
+        pendingAmount: 0,
+
+        overdueAmount: 0,
+
+        outstanding: 0,
+      });
+    });
+
+    // =========================================
+    // ADD / MERGE INVOICE CUSTOMERS
+    // =========================================
+
+    invoices.forEach((invoice) => {
+      const name = invoice.customerName?.trim() || "";
+
+      const email = invoice.customerEmail?.trim().toLowerCase() || "";
+
+      if (!name && !email) {
+        return;
+      }
+
+      const key = email || name.toLowerCase();
+
+      // =========================================
+      // CUSTOMER DOESN'T EXIST YET
+      // =========================================
+
+      if (!customerMap.has(key)) {
+        customerMap.set(key, {
+          _id: invoice.customer || key,
+
+          customerName: name || "Unknown Customer",
+
+          customerEmail: email,
+
+          customerPhone: "",
+
+          customerCompany: "",
+
+          customerAddress: invoice.customerAddress?.trim() || "",
+
+          customerCity: "",
+
+          customerCountry: "",
+
+          customerNotes: "",
+
+          invoiceCount: 0,
+
+          totalAmount: 0,
+
+          paidAmount: 0,
+
+          pendingAmount: 0,
+
+          overdueAmount: 0,
+
+          outstanding: 0,
+        });
+      }
+
+      const customer = customerMap.get(key);
+
+      // =========================================
+      // UPDATE CUSTOMER INFORMATION
+      // =========================================
+
+      if (!customer.customerName && name) {
+        customer.customerName = name;
+      }
+
+      if (!customer.customerEmail && email) {
+        customer.customerEmail = email;
+      }
+
+      if (!customer.customerAddress && invoice.customerAddress) {
+        customer.customerAddress = invoice.customerAddress;
+      }
+
+      // =========================================
+      // INVOICE COUNT
+      // =========================================
+
+      customer.invoiceCount += 1;
+
+      // =========================================
+      // TOTAL
+      // =========================================
+
+      const total = Number(invoice.total || 0);
+
+      customer.totalAmount += total;
+
+      // =========================================
+      // STATUS
+      // =========================================
+
+      if (invoice.status === "Paid") {
+        customer.paidAmount += total;
+      }
+
+      if (invoice.status === "Pending" || invoice.status === "Sent") {
+        customer.pendingAmount += total;
+      }
+
+      if (invoice.status === "Overdue") {
+        customer.overdueAmount += total;
+      }
+
+      // =========================================
+      // OUTSTANDING
+      // =========================================
+
+      customer.outstanding = customer.totalAmount - customer.paidAmount;
+    });
+
+    // =========================================
+    // FINAL ARRAY
+    // =========================================
+
+    const customers = Array.from(customerMap.values());
+
+    // Recalculate outstanding
+    customers.forEach((customer) => {
+      customer.outstanding = customer.totalAmount - customer.paidAmount;
+    });
+
+    // =========================================
+    // SORT
+    // =========================================
+
+    customers.sort((a, b) => a.customerName.localeCompare(b.customerName));
+
+    console.log("COMBINED CUSTOMERS:", customers);
+
+    // =========================================
+    // RESPONSE
+    // =========================================
 
     return res.status(200).json({
       success: true,
+
+      count: customers.length,
+
       customers,
     });
   } catch (error) {
-    console.error("Get customers from invoices error:", error);
+    console.error("Get customers error:", error);
 
     return res.status(500).json({
       success: false,
+
       message: "Failed to fetch customers",
+
+      error: error.message,
     });
   }
 };
@@ -166,6 +313,7 @@ export const createInvoice = async (req, res) => {
   try {
     const {
       invoiceNumber,
+      customer,
       customerName,
       customerEmail,
       customerAddress,
@@ -178,9 +326,9 @@ export const createInvoice = async (req, res) => {
       notes = "",
     } = req.body;
 
-    // ==============================
+    // =========================================
     // VALIDATION
-    // ==============================
+    // =========================================
 
     if (!invoiceNumber || !customerName || !dueDate) {
       return res.status(400).json({
@@ -196,9 +344,9 @@ export const createInvoice = async (req, res) => {
       });
     }
 
-    // ==============================
-    // CHECK DUPLICATE
-    // ==============================
+    // =========================================
+    // CHECK DUPLICATE INVOICE NUMBER
+    // =========================================
 
     const existingInvoice = await Invoice.findOne({
       invoiceNumber: invoiceNumber.trim(),
@@ -211,9 +359,9 @@ export const createInvoice = async (req, res) => {
       });
     }
 
-    // ==============================
+    // =========================================
     // CALCULATE ITEMS
-    // ==============================
+    // =========================================
 
     const calculatedItems = items.map((item) => {
       const quantity = Number(item.quantity);
@@ -239,29 +387,29 @@ export const createInvoice = async (req, res) => {
       };
     });
 
-    // ==============================
-    // CALCULATE SUBTOTAL
-    // ==============================
+    // =========================================
+    // SUBTOTAL
+    // =========================================
 
     const subtotal = calculatedItems.reduce((sum, item) => sum + item.total, 0);
 
-    // ==============================
+    // =========================================
     // TAX + DISCOUNT
-    // ==============================
+    // =========================================
 
     const taxAmount = Math.max(0, Number(tax) || 0);
 
     const discountAmount = Math.max(0, Number(discount) || 0);
 
-    // ==============================
+    // =========================================
     // FINAL TOTAL
-    // ==============================
+    // =========================================
 
     const total = Math.max(0, subtotal + taxAmount - discountAmount);
 
-    // ==============================
+    // =========================================
     // VALIDATE STATUS
-    // ==============================
+    // =========================================
 
     const allowedStatuses = [
       "Draft",
@@ -279,12 +427,78 @@ export const createInvoice = async (req, res) => {
       });
     }
 
-    // ==============================
+    // =========================================
+    // FIND CUSTOMER
+    // =========================================
+
+    let customerId = customer || null;
+
+    /*
+      If frontend sends customer ID,
+      verify that customer exists.
+    */
+
+    if (customerId) {
+      const existingCustomer = await Customer.findOne({
+        _id: customerId,
+        createdBy: req.user._id,
+      });
+
+      if (!existingCustomer) {
+        return res.status(404).json({
+          success: false,
+          message: "Customer not found",
+        });
+      }
+    }
+
+    /*
+      If frontend does NOT send customer ID,
+      find customer using email.
+    */
+
+    if (!customerId && customerEmail) {
+      const existingCustomer = await Customer.findOne({
+        email: customerEmail.trim().toLowerCase(),
+        createdBy: req.user._id,
+      });
+
+      if (existingCustomer) {
+        customerId = existingCustomer._id;
+      }
+    }
+
+    // =========================================
+    // CREATE CUSTOMER IF NOT FOUND
+    // =========================================
+
+    /*
+      This makes your current CreateInvoice page
+      automatically create a customer record.
+    */
+
+    if (!customerId && customerEmail) {
+      const newCustomer = await Customer.create({
+        name: customerName.trim(),
+
+        email: customerEmail.trim().toLowerCase(),
+
+        address: customerAddress?.trim() || "",
+
+        createdBy: req.user._id,
+      });
+
+      customerId = newCustomer._id;
+    }
+
+    // =========================================
     // CREATE INVOICE
-    // ==============================
+    // =========================================
 
     const invoice = await Invoice.create({
       invoiceNumber: invoiceNumber.trim(),
+
+      customer: customerId,
 
       customerName: customerName.trim(),
 
@@ -313,9 +527,9 @@ export const createInvoice = async (req, res) => {
       createdBy: req.user._id,
     });
 
-    // ==============================
+    // =========================================
     // CREATE NOTIFICATION
-    // ==============================
+    // =========================================
 
     await createNotification({
       user: req.user._id,
@@ -324,23 +538,29 @@ export const createInvoice = async (req, res) => {
 
       title: "Invoice Created",
 
-      message: `Invoice ${invoice.invoiceNumber} for ${
-        invoice.customerName
-      } was created successfully.`,
+      message: `Invoice ${invoice.invoiceNumber} for ${invoice.customerName} was created successfully.`,
 
       invoice: invoice._id,
     });
 
-    // ==============================
+    // =========================================
+    // POPULATE CUSTOMER
+    // =========================================
+
+    const populatedInvoice = await Invoice.findById(invoice._id)
+      .populate("customer", "name email phone company address")
+      .populate("createdBy", "name email");
+
+    // =========================================
     // RESPONSE
-    // ==============================
+    // =========================================
 
     return res.status(201).json({
       success: true,
 
       message: "Invoice created successfully",
 
-      invoice,
+      invoice: populatedInvoice,
     });
   } catch (error) {
     console.error("CREATE INVOICE ERROR:", error);
